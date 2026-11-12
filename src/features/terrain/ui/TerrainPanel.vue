@@ -2,7 +2,7 @@
 import type { Terrain } from "../../../shared/types";
 import { terrainRules } from "../lib/cost";
 defineProps<{ brush: Terrain | null; locked: boolean }>();
-defineEmits<{ paint: [terrain: Terrain | null] }>();
+defineEmits<{ paint: [terrain: Terrain | null]; resize: [] }>();
 </script>
 <template>
   <section class="panel terrain-panel">
@@ -25,5 +25,8 @@ defineEmits<{ paint: [terrain: Terrain | null] }>();
         >
       </button>
     </div>
+    <button class="size-trigger" :disabled="locked" @click="$emit('resize')">
+      调整地图尺寸 <span>⇱</span>
+    </button>
   </section>
 </template>

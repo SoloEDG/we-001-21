@@ -1,11 +1,13 @@
 import type { Session, Battle } from "../shared/types";
 import { clone } from "../shared/document";
-import { createMap } from "../features/terrain";
+import { createMap, DEFAULT_HEIGHT, DEFAULT_WIDTH } from "../features/terrain";
 import { createUnits } from "../features/roster";
 import { order } from "../features/initiative";
 export function newSession(): Session {
   const live: Battle = {
-    tiles: createMap(),
+    width: DEFAULT_WIDTH,
+    height: DEFAULT_HEIGHT,
+    tiles: createMap(DEFAULT_WIDTH, DEFAULT_HEIGHT),
     units: createUnits(),
     round: 1,
     queue: [],

@@ -23,15 +23,17 @@ export function reachable(
       [0, -1],
     ]) {
       const n = { x: pos.x + d[0], y: pos.y + d[1] };
+      if (n.x < 0 || n.y < 0 || n.x >= b.width || n.y >= b.height) continue;
       const tile = b.tiles.find((t) => key(t) === key(n));
       if (
         !tile ||
-        b.units.some((v) => v.hp > 0 && v.id !== u.id && key(v) === key(n))
+        b.units.some(
+          (v) => v.hp > 0 && v.deployed && v.id !== u.id && key(v) === key(n),
+        )
       )
         continue;
       const cost = route.cost + movementCost(tile.terrain, u);
-      if (cost > budget || cost >= (result.get(key(n))?.cost ?? Infinity))
-        continue;
+      if (!Number.isFinite(cost) || cost >= (result.get(key(n))?.cost ?? Infinity)) continue;
       result.set(key(n), { cost, path: [...route.path, n] });
       pending.push(n);
     }

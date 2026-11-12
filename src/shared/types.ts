@@ -25,8 +25,17 @@ export interface Unit extends Point {
   statuses: Status[];
   moved: boolean;
   acted: boolean;
+  /**
+   * 是否已经放在战场上。被缩图挤出编队的角色会保留全部属性，
+   * 但 deployed 变为 false，进入待部署列表。
+   */
+  deployed: boolean;
 }
 export interface Battle {
+  /** 地图宽度（列数）。历史快照各自保留记录时的尺寸。 */
+  width: number;
+  /** 地图高度（行数）。 */
+  height: number;
   tiles: Tile[];
   units: Unit[];
   round: number;
@@ -34,7 +43,13 @@ export interface Battle {
   active: string;
   ended: string | null;
 }
-export type EventKind = "move" | "skill" | "wait" | "terrain";
+export type EventKind =
+  | "move"
+  | "skill"
+  | "wait"
+  | "terrain"
+  | "resize"
+  | "deploy";
 export interface BattleEvent {
   id: number;
   kind: EventKind;

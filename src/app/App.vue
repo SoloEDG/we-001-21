@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { BattleMap, TerrainPanel } from "../features/terrain";
+import { BattleMap, MapSizePanel, TerrainPanel } from "../features/terrain";
 import { RosterPanel } from "../features/roster";
 import { ActionPanel } from "../features/tactics";
 import { TurnOrder } from "../features/initiative";
@@ -16,6 +16,17 @@ const {
   battle,
   actor,
   locked,
+  pending,
+  placingName,
+  deployable,
+  resizeOpen,
+  resizeDraft,
+  resizePlan,
+  openResize,
+  updateResize,
+  confirmResize,
+  cancelResize,
+  selectUnit,
   routes,
   targets,
   path,
@@ -56,7 +67,8 @@ const {
           :units="battle.units"
           :selected="selected"
           :active="battle.active"
-          @select="selected = $event"
+          :pending="pending.map((u) => u.id)"
+          @select="selectUnit"
         /><TerrainPanel
           :brush="brush"
           :locked="locked"
@@ -64,6 +76,16 @@ const {
             brush = $event;
             skill = '';
           "
+          @resize="openResize"
+        />
+        <MapSizePanel
+          v-if="resizeOpen"
+          :draft="resizeDraft"
+          :plan="resizePlan"
+          :locked="locked"
+          @update="updateResize"
+          @confirm="confirmResize"
+          @cancel="cancelResize"
         />
       </aside>
       <div class="center">
@@ -73,6 +95,8 @@ const {
           :routes="[...routes.keys()]"
           :targets="targets.map(key)"
           :path="path"
+          :deployable="deployable"
+          :plan="resizePlan"
           @cell="cell"
         />
         <div class="field-note">
@@ -89,6 +113,7 @@ const {
           :skill="skill"
           :locked="locked"
           :notice="notice"
+          :placing-name="placingName"
           @skill="
             skill = $event;
             brush = null;

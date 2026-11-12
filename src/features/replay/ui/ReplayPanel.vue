@@ -41,7 +41,11 @@ defineEmits<{ seek: [cursor: number]; play: []; stop: []; download: [] }>();
               ? "✧"
               : e.kind === "terrain"
                 ? "△"
-                : "→"
+                : e.kind === "resize"
+                  ? "⇱"
+                  : e.kind === "deploy"
+                    ? "◌"
+                    : "→"
         }}</span>
       </button>
     </div>
